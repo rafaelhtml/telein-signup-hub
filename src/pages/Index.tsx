@@ -219,7 +219,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Agents de IA 24/7</h3>
                       <p className="text-sm text-muted-foreground">
-                        Atendimento automático por IA que responde clientes instantaneamente, qualifica leads e agenda reuniões
+                        Crie atendentes por IA que respondem clientes instantaneamente, qualificam leads e agendam reuniões
                       </p>
                     </div>
                   </div>
@@ -243,7 +243,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Chat Omnichannel (Chat Telein)</h3>
                       <p className="text-sm text-muted-foreground">
-                        Centralize WhatsApp, Instagram e outros canais em uma única plataforma de atendimento
+                        Centralize WhatsApp e outros canais em uma única plataforma de atendimento
                       </p>
                     </div>
                   </div>
@@ -280,6 +280,18 @@ const Index = () => {
                       <h3 className="font-semibold text-foreground mb-1">Chipmassa</h3>
                       <p className="text-sm text-muted-foreground">
                         Números virtuais descartáveis para ativar WhatsApp, Telegram e outros apps em massa
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <PhoneCall className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">IPBX Inteligente</h3>
+                      <p className="text-sm text-muted-foreground">
+                        PABX IP virtual com recursos avançados de telefonia em nuvem
                       </p>
                     </div>
                   </div>
