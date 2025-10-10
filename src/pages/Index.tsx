@@ -83,22 +83,27 @@ const Index = () => {
       const queryString = urlParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
       
+      const payload = {
+        nome: data.name,
+        empresa: data.company,
+        cpf_cnpj: data.cpfCnpj.replace(/\D/g, ""),
+        email: data.email,
+        telefone: data.phone.replace(/\D/g, ""),
+        senha: data.password,
+      };
+
+      console.log("Enviando payload:", payload);
+      
       const response = await fetch(backendUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: data.name,
-          company: data.company,
-          cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
-          email: data.email,
-          phone: data.phone.replace(/\D/g, ""),
-          password: data.password,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
+      console.log("Resposta do servidor:", result);
 
       if (result.ok && response.status === 201) {
         setIsSuccess(true);
