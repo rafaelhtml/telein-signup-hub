@@ -83,18 +83,31 @@ const Index = () => {
       const queryString = urlParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
       
+      // Tenta múltiplos formatos de campo que o backend pode esperar
       const payload = {
         nome: data.name,
+        name: data.name,
         empresa: data.company,
+        company: data.company,
         cpf_cnpj: data.cpfCnpj.replace(/\D/g, ""),
+        cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
+        cpf: data.cpfCnpj.replace(/\D/g, ""),
+        cnpj: data.cpfCnpj.replace(/\D/g, ""),
         email: data.email,
         telefone: data.phone.replace(/\D/g, ""),
+        phone: data.phone.replace(/\D/g, ""),
+        whatsapp: data.phone.replace(/\D/g, ""),
         senha: data.password,
+        password: data.password,
       };
 
-      console.log("Enviando payload:", payload);
+      console.log("=== DEBUG CADASTRO ===");
+      console.log("URL:", backendUrl);
+      console.log("Payload sendo enviado (JSON):", payload);
+      console.log("Dados do formulário:", data);
       
-      const response = await fetch(backendUrl, {
+      // Tenta primeiro com JSON
+      let response = await fetch(backendUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,8 +115,38 @@ const Index = () => {
         body: JSON.stringify(payload),
       });
 
+      console.log("Status da resposta:", response.status);
+      
+      // Se falhar com JSON, tenta com FormData (formato tradicional de POST)
+      if (!response.ok || response.status !== 201) {
+        console.log("Tentando com FormData...");
+        const formData = new FormData();
+        formData.append("nome", data.name);
+        formData.append("name", data.name);
+        formData.append("empresa", data.company);
+        formData.append("company", data.company);
+        formData.append("cpf_cnpj", data.cpfCnpj.replace(/\D/g, ""));
+        formData.append("cpfCnpj", data.cpfCnpj.replace(/\D/g, ""));
+        formData.append("cpf", data.cpfCnpj.replace(/\D/g, ""));
+        formData.append("cnpj", data.cpfCnpj.replace(/\D/g, ""));
+        formData.append("email", data.email);
+        formData.append("telefone", data.phone.replace(/\D/g, ""));
+        formData.append("phone", data.phone.replace(/\D/g, ""));
+        formData.append("whatsapp", data.phone.replace(/\D/g, ""));
+        formData.append("senha", data.password);
+        formData.append("password", data.password);
+        
+        response = await fetch(backendUrl, {
+          method: "POST",
+          body: formData,
+        });
+        
+        console.log("Status da resposta (FormData):", response.status);
+      }
+      
       const result = await response.json();
-      console.log("Resposta do servidor:", result);
+      console.log("Resposta completa do servidor:", result);
+      console.log("=== FIM DEBUG ===");
 
       if (result.ok && response.status === 201) {
         setIsSuccess(true);
