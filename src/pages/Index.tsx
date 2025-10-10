@@ -175,7 +175,7 @@ const Index = () => {
               </p>
             </div>
             <Button 
-              onClick={() => window.location.href = "/login"}
+              onClick={() => window.location.href = "https://interface.telein.com.br/cadastro/urareversa_pixel.php"}
               className="w-full"
               size="lg"
             >
