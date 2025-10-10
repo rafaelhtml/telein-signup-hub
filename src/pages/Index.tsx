@@ -466,6 +466,36 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="mt-12 border-t border-border">
+          <div className="max-w-6xl mx-auto py-8">
+            <div className="grid md:grid-cols-3 gap-8 text-sm text-muted-foreground">
+              {/* Company Info */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-3">Telein</h4>
+                <p className="mb-2">CNPJ: 13.622.342/0001-95</p>
+                <p>Av. Forte do Arraial do Novo Bom Jesus, 1331</p>
+                <p>Cordeiro, Recife/PE, 50640-000</p>
+              </div>
+
+              {/* Contact */}
+              <div>
+                <h4 className="font-semibold text-foreground mb-3">Contato</h4>
+                <p className="mb-1">0800 609 9350</p>
+                <p className="mb-1">(81) 3454-2323</p>
+                <p className="mb-1">suporte@telein.com.br</p>
+                <p>contato@telein.com.br</p>
+              </div>
+
+              {/* Copyright */}
+              <div>
+                <p className="md:text-right">© TELEIN {new Date().getFullYear()}</p>
+                <p className="md:text-right">Todos os Direitos Reservados</p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
