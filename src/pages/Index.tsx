@@ -21,7 +21,10 @@ const formSchema = z.object({
   cpfCnpj: z.string()
     .trim()
     .min(11, "CPF/CNPJ inválido")
-    .regex(/^\d+$/, "Apenas números"),
+    .refine((val) => {
+      const numbers = val.replace(/\D/g, "");
+      return numbers.length === 11 || numbers.length === 14;
+    }, "CPF deve ter 11 dígitos ou CNPJ 14 dígitos"),
   email: z.string()
     .trim()
     .email("E-mail inválido")
