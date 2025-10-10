@@ -219,7 +219,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Agents de IA 24/7</h3>
                       <p className="text-sm text-muted-foreground">
-                        Respostas imediatas e triagem automática com inteligência artificial
+                        Atendimento automático por IA que responde clientes instantaneamente, qualifica leads e agenda reuniões
                       </p>
                     </div>
                   </div>
@@ -231,7 +231,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">URA Reversa</h3>
                       <p className="text-sm text-muted-foreground">
-                        Prospecção inteligente com ligações automatizadas e interativas
+                        Robô que liga automaticamente para sua base, qualifica interessados e transfere para seu time
                       </p>
                     </div>
                   </div>
@@ -243,7 +243,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Chat Omnichannel (Chat Telein)</h3>
                       <p className="text-sm text-muted-foreground">
-                        WhatsApp e Instagram integrados para atendimento unificado
+                        Centralize WhatsApp, Instagram e outros canais em uma única plataforma de atendimento
                       </p>
                     </div>
                   </div>
@@ -255,7 +255,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Disparo em Massa</h3>
                       <p className="text-sm text-muted-foreground">
-                        API oficial e normal para campanhas de comunicação em larga escala
+                        Envie milhares de mensagens personalizadas via WhatsApp usando API oficial ou convencional
                       </p>
                     </div>
                   </div>
@@ -267,7 +267,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Discador</h3>
                       <p className="text-sm text-muted-foreground">
-                        Sistema de discagem automática para outbound em escala
+                        Sistema que disca automaticamente para sua base e conecta apenas chamadas atendidas ao time
                       </p>
                     </div>
                   </div>
@@ -279,7 +279,7 @@ const Index = () => {
                     <div>
                       <h3 className="font-semibold text-foreground mb-1">Chipmassa</h3>
                       <p className="text-sm text-muted-foreground">
-                        Números virtuais para ativação de aplicativos
+                        Números virtuais descartáveis para ativar WhatsApp, Telegram e outros apps em massa
                       </p>
                     </div>
                   </div>
