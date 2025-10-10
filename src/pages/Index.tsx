@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Check, Loader2, CheckCircle2, Server, MessageSquare, PhoneCall, Bot, Zap } from "lucide-react";
+import { Eye, EyeOff, Check, Loader2, CheckCircle2, MessageSquare, PhoneCall, Bot, Zap, Smartphone, Headphones } from "lucide-react";
+import teleinLogo from "@/assets/telein-logo.png";
 
 const formSchema = z.object({
   name: z.string()
@@ -155,9 +156,11 @@ const Index = () => {
         <div className="max-w-6xl mx-auto">
           {/* Logo/Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-              Telein
-            </h1>
+            <img 
+              src={teleinLogo} 
+              alt="Telein Logo" 
+              className="h-16 md:h-20 mx-auto mb-4"
+            />
             <p className="text-muted-foreground">
               Ecossistema completo de comunicação inteligente
             </p>
@@ -173,13 +176,25 @@ const Index = () => {
                 
                 <div className="space-y-4">
                   <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <Bot className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground mb-1">Agents de IA 24/7</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Respostas imediatas e triagem automática com inteligência artificial
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                       <PhoneCall className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">URA Reversa & Discador</h3>
+                      <h3 className="font-semibold text-foreground mb-1">URA Reversa</h3>
                       <p className="text-sm text-muted-foreground">
-                        Prospecção inteligente com ligações automatizadas e outbound em escala
+                        Prospecção inteligente com ligações automatizadas e interativas
                       </p>
                     </div>
                   </div>
@@ -189,7 +204,7 @@ const Index = () => {
                       <MessageSquare className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Chat Omnichannel</h3>
+                      <h3 className="font-semibold text-foreground mb-1">Chat Omnichannel (Chat Telein)</h3>
                       <p className="text-sm text-muted-foreground">
                         WhatsApp e Instagram integrados para atendimento unificado
                       </p>
@@ -210,24 +225,24 @@ const Index = () => {
 
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-                      <Bot className="w-5 h-5 text-accent" />
+                      <Headphones className="w-5 h-5 text-accent" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Agents de IA 24/7</h3>
+                      <h3 className="font-semibold text-foreground mb-1">Discador</h3>
                       <p className="text-sm text-muted-foreground">
-                        Respostas imediatas e triagem automática com inteligência artificial
+                        Sistema de discagem automática para outbound em escala
                       </p>
                     </div>
                   </div>
 
                   <div className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Server className="w-5 h-5 text-primary" />
+                      <Smartphone className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Métricas & Integrações</h3>
+                      <h3 className="font-semibold text-foreground mb-1">Chipmassa</h3>
                       <p className="text-sm text-muted-foreground">
-                        Tudo em um só lugar com dashboards completos e APIs abertas
+                        Números virtuais para ativação de aplicativos
                       </p>
                     </div>
                   </div>
