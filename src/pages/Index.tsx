@@ -83,22 +83,15 @@ const Index = () => {
       const queryString = urlParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
       
-      // Tenta múltiplos formatos de campo que o backend pode esperar
+      // Campos exatos que o backend PHP espera
       const payload = {
-        nome: data.name,
-        name: data.name,
+        nomecompleto: data.name,
         empresa: data.company,
-        company: data.company,
-        cpf_cnpj: data.cpfCnpj.replace(/\D/g, ""),
-        cpfCnpj: data.cpfCnpj.replace(/\D/g, ""),
         cpf: data.cpfCnpj.replace(/\D/g, ""),
-        cnpj: data.cpfCnpj.replace(/\D/g, ""),
         email: data.email,
         telefone: data.phone.replace(/\D/g, ""),
-        phone: data.phone.replace(/\D/g, ""),
-        whatsapp: data.phone.replace(/\D/g, ""),
-        senha: data.password,
-        password: data.password,
+        senhanova: data.password,
+        senhanova1: data.confirmPassword,
       };
 
       console.log("=== DEBUG CADASTRO ===");
@@ -121,20 +114,13 @@ const Index = () => {
       if (!response.ok || response.status !== 201) {
         console.log("Tentando com FormData...");
         const formData = new FormData();
-        formData.append("nome", data.name);
-        formData.append("name", data.name);
+        formData.append("nomecompleto", data.name);
         formData.append("empresa", data.company);
-        formData.append("company", data.company);
-        formData.append("cpf_cnpj", data.cpfCnpj.replace(/\D/g, ""));
-        formData.append("cpfCnpj", data.cpfCnpj.replace(/\D/g, ""));
         formData.append("cpf", data.cpfCnpj.replace(/\D/g, ""));
-        formData.append("cnpj", data.cpfCnpj.replace(/\D/g, ""));
         formData.append("email", data.email);
         formData.append("telefone", data.phone.replace(/\D/g, ""));
-        formData.append("phone", data.phone.replace(/\D/g, ""));
-        formData.append("whatsapp", data.phone.replace(/\D/g, ""));
-        formData.append("senha", data.password);
-        formData.append("password", data.password);
+        formData.append("senhanova", data.password);
+        formData.append("senhanova1", data.confirmPassword);
         
         response = await fetch(backendUrl, {
           method: "POST",
