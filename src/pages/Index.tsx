@@ -83,7 +83,13 @@ const Index = () => {
       const queryString = urlParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
       
-      // Campos exatos que o backend PHP espera
+      // Captura os parâmetros da URL
+      const anuncio = urlParams.get('anuncio') || '';
+      const conjuntodeanuncio = urlParams.get('conjuntodeanuncio') || '';
+      const campanha = urlParams.get('campanha') || '';
+      const produto = urlParams.get('produto') || '';
+      
+      // Campos exatos que o backend PHP espera + parâmetros da URL
       const payload = {
         nomecompleto: data.name,
         empresa: data.company,
@@ -92,6 +98,10 @@ const Index = () => {
         telefone: data.phone.replace(/\D/g, ""),
         senhanova: data.password,
         senhanova1: data.confirmPassword,
+        anuncio,
+        conjuntodeanuncio,
+        campanha,
+        produto,
       };
 
       console.log("=== DEBUG CADASTRO ===");
@@ -121,6 +131,10 @@ const Index = () => {
         formData.append("telefone", data.phone.replace(/\D/g, ""));
         formData.append("senhanova", data.password);
         formData.append("senhanova1", data.confirmPassword);
+        formData.append("anuncio", anuncio);
+        formData.append("conjuntodeanuncio", conjuntodeanuncio);
+        formData.append("campanha", campanha);
+        formData.append("produto", produto);
         
         response = await fetch(backendUrl, {
           method: "POST",
