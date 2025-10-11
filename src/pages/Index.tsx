@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -58,6 +58,23 @@ const Index = () => {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
+
+  // Pré-preenche o formulário com dados da URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const nome = urlParams.get('nome') || urlParams.get('nomecompleto');
+    const empresa = urlParams.get('empresa');
+    const cpf = urlParams.get('cpf') || urlParams.get('cpfcnpj');
+    const email = urlParams.get('email');
+    const telefone = urlParams.get('telefone') || urlParams.get('phone');
+    
+    if (nome) setValue('name', nome);
+    if (empresa) setValue('company', empresa);
+    if (cpf) setValue('cpfCnpj', formatCpfCnpj(cpf));
+    if (email) setValue('email', email);
+    if (telefone) setValue('phone', formatPhone(telefone));
+  }, [setValue]);
 
   const formatCpfCnpj = (value: string) => {
     const numbers = value.replace(/\D/g, "");
