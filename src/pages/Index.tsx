@@ -97,17 +97,26 @@ const Index = () => {
     
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      const queryString = urlParams.toString();
-      const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
       
-      // Captura os parâmetros da URL
-      const anuncio = urlParams.get('anuncio') || '';
+      // Captura os parâmetros da URL para passar via GET
+      const indiqueeganhe = urlParams.get('indiqueeganhe') || '';
       const conjuntodeanuncio = urlParams.get('conjuntodeanuncio') || '';
       const campanha = urlParams.get('campanha') || '';
-      const produto = urlParams.get('produto') || '';
-      const indiqueeganhe = urlParams.get('indiqueeganhe') || '';
+      const anuncio = urlParams.get('anuncio') || '';
+      const posicionamento = urlParams.get('posicionamento') || '';
       
-      // Campos exatos que o backend PHP espera + parâmetros da URL
+      // Monta a query string com os parâmetros GET
+      const getParams = new URLSearchParams();
+      if (indiqueeganhe) getParams.append('indiqueeganhe', indiqueeganhe);
+      if (conjuntodeanuncio) getParams.append('conjuntodeanuncio', conjuntodeanuncio);
+      if (campanha) getParams.append('campanha', campanha);
+      if (anuncio) getParams.append('anuncio', anuncio);
+      if (posicionamento) getParams.append('posicionamento', posicionamento);
+      
+      const queryString = getParams.toString();
+      const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
+      
+      // Payload apenas com dados do formulário (via POST)
       const payload = {
         nomecompleto: data.name,
         empresa: data.company,
@@ -116,11 +125,6 @@ const Index = () => {
         telefone: data.phone.replace(/\D/g, ""),
         senhanova: data.password,
         senhanova1: data.confirmPassword,
-        anuncio,
-        conjuntodeanuncio,
-        campanha,
-        produto,
-        indiqueeganhe,
       };
 
       console.log("=== DEBUG CADASTRO ===");
@@ -150,11 +154,6 @@ const Index = () => {
         formData.append("telefone", data.phone.replace(/\D/g, ""));
         formData.append("senhanova", data.password);
         formData.append("senhanova1", data.confirmPassword);
-        formData.append("anuncio", anuncio);
-        formData.append("conjuntodeanuncio", conjuntodeanuncio);
-        formData.append("campanha", campanha);
-        formData.append("produto", produto);
-        formData.append("indiqueeganhe", indiqueeganhe);
         
         response = await fetch(backendUrl, {
           method: "POST",
