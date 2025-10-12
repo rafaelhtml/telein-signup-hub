@@ -105,6 +105,7 @@ const Index = () => {
       const conjuntodeanuncio = urlParams.get('conjuntodeanuncio') || '';
       const campanha = urlParams.get('campanha') || '';
       const produto = urlParams.get('produto') || '';
+      const indiqueeganhe = urlParams.get('indiqueeganhe') || '';
       
       // Campos exatos que o backend PHP espera + parâmetros da URL
       const payload = {
@@ -119,6 +120,7 @@ const Index = () => {
         conjuntodeanuncio,
         campanha,
         produto,
+        indiqueeganhe,
       };
 
       console.log("=== DEBUG CADASTRO ===");
@@ -152,6 +154,7 @@ const Index = () => {
         formData.append("conjuntodeanuncio", conjuntodeanuncio);
         formData.append("campanha", campanha);
         formData.append("produto", produto);
+        formData.append("indiqueeganhe", indiqueeganhe);
         
         response = await fetch(backendUrl, {
           method: "POST",
