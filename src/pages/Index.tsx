@@ -104,6 +104,8 @@ const Index = () => {
       const campanha = urlParams.get('campanha') || '';
       const anuncio = urlParams.get('anuncio') || '';
       const posicionamento = urlParams.get('posicionamento') || '';
+      const pixelId = urlParams.get('pixel_id') || '';
+      const conversionName = urlParams.get('conversion_name') || '';
       
       // Monta a query string com os parâmetros GET
       const getParams = new URLSearchParams();
@@ -112,6 +114,8 @@ const Index = () => {
       if (campanha) getParams.append('campanha', campanha);
       if (anuncio) getParams.append('anuncio', anuncio);
       if (posicionamento) getParams.append('posicionamento', posicionamento);
+      if (pixelId) getParams.append('pixel_id', pixelId);
+      if (conversionName) getParams.append('conversion_name', conversionName);
       
       const queryString = getParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
@@ -190,6 +194,23 @@ const Index = () => {
       setIsLoading(false);
     }
   };
+
+  // Dispara o pixel quando o cadastro for concluído
+  useEffect(() => {
+    if (isSuccess) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pixelId = urlParams.get('pixel_id');
+      const conversionName = urlParams.get('conversion_name') || 'Lead';
+      
+      if (pixelId && typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('trackCustom', conversionName, {
+          content_name: 'Cadastro Telein',
+          status: 'completed'
+        });
+        console.log(`Pixel ${pixelId} disparado com evento: ${conversionName}`);
+      }
+    }
+  }, [isSuccess]);
 
   if (isSuccess) {
     return (
