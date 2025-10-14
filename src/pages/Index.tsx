@@ -200,11 +200,21 @@ const Index = () => {
   // Dispara o pixel quando o cadastro for concluído
   useEffect(() => {
     if (isSuccess && typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('trackCustom', 'cadastroEcossistema', {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pixelId = urlParams.get('pixel_id');
+      const conversionName = urlParams.get('conversion_name') || 'cadastroEcossistema';
+      
+      // Se tiver pixel_id customizado, inicializa o pixel
+      if (pixelId && pixelId !== '1701412423354782') {
+        (window as any).fbq('init', pixelId);
+      }
+      
+      // Dispara o evento com o nome correto
+      (window as any).fbq('trackCustom', conversionName, {
         content_name: 'Cadastro Telein',
         status: 'completed'
       });
-      console.log('Evento cadastroEcossistema disparado');
+      console.log(`Evento ${conversionName} disparado${pixelId ? ` para pixel ${pixelId}` : ''}`);
     }
   }, [isSuccess]);
 
