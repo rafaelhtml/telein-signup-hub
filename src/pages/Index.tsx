@@ -5,6 +5,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Check, Loader2, CheckCircle2, MessageSquare, PhoneCall, Bot, Zap, Smartphone, Headphones } from "lucide-react";
 import teleinLogo from "@/assets/telein-logo.png";
@@ -33,6 +34,8 @@ const formSchema = z.object({
     .trim()
     .min(14, "Telefone inválido")
     .max(15, "Telefone inválido"),
+  segmento: z.string()
+    .min(1, "Selecione um segmento"),
   password: z.string()
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
   confirmPassword: z.string()
@@ -129,6 +132,7 @@ const Index = () => {
         cpf: data.cpfCnpj.replace(/\D/g, ""),
         email: data.email,
         telefone: data.phone.replace(/\D/g, ""),
+        segmento: data.segmento,
         senhanova: data.password,
         senhanova1: data.confirmPassword,
       };
@@ -158,6 +162,7 @@ const Index = () => {
         formData.append("cpf", data.cpfCnpj.replace(/\D/g, ""));
         formData.append("email", data.email);
         formData.append("telefone", data.phone.replace(/\D/g, ""));
+        formData.append("segmento", data.segmento);
         formData.append("senhanova", data.password);
         formData.append("senhanova1", data.confirmPassword);
         
@@ -455,6 +460,44 @@ const Index = () => {
                     {errors.phone && (
                       <p className="text-sm text-destructive" role="alert">
                         {errors.phone.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="segmento">Segmento *</Label>
+                    <Select
+                      value={watch("segmento")}
+                      onValueChange={(value) => setValue("segmento", value)}
+                    >
+                      <SelectTrigger 
+                        id="segmento"
+                        aria-invalid={errors.segmento ? "true" : "false"}
+                      >
+                        <SelectValue placeholder="Selecione seu segmento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="credito_consignado">Crédito Consignado</SelectItem>
+                        <SelectItem value="imobiliario">Imobiliário</SelectItem>
+                        <SelectItem value="seguros">Seguros</SelectItem>
+                        <SelectItem value="consorcios">Consórcios</SelectItem>
+                        <SelectItem value="telecom">Telecom</SelectItem>
+                        <SelectItem value="cobranca">Cobrança</SelectItem>
+                        <SelectItem value="lancamentos_digitais">Lançamentos Digitais</SelectItem>
+                        <SelectItem value="ecommerce">E-commerce</SelectItem>
+                        <SelectItem value="saude_clinicas">Saúde & Clínicas</SelectItem>
+                        <SelectItem value="educacao_cursos">Educação & Cursos</SelectItem>
+                        <SelectItem value="varejo_fisico">Varejo Físico</SelectItem>
+                        <SelectItem value="restaurantes_delivery">Restaurantes & Delivery</SelectItem>
+                        <SelectItem value="automotivo">Automotivo</SelectItem>
+                        <SelectItem value="turismo_hotelaria">Turismo & Hotelaria</SelectItem>
+                        <SelectItem value="servicos_profissionais">Serviços Profissionais</SelectItem>
+                        <SelectItem value="outros">Outros</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.segmento && (
+                      <p className="text-sm text-destructive" role="alert">
+                        {errors.segmento.message}
                       </p>
                     )}
                   </div>
