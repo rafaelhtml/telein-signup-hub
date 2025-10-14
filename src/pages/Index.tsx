@@ -174,6 +174,31 @@ const Index = () => {
       console.log("=== FIM DEBUG ===");
 
       if (result.ok && response.status === 201) {
+        // Dispara eventos do Meta Pixel ANTES de mudar o estado
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const eventName = urlParams.get('event_name');
+          
+          console.log('🎯 Disparando eventos do Meta Pixel após cadastro bem-sucedido');
+          console.log('event_name da URL:', eventName || '(não informado)');
+          
+          // SEMPRE dispara cadastroEcossistema
+          (window as any).fbq('trackCustom', 'cadastroEcossistema', {
+            content_name: 'Cadastro Telein',
+            status: 'completed'
+          });
+          console.log('✅ Evento disparado: cadastroEcossistema');
+          
+          // Se houver event_name adicional, dispara também
+          if (eventName && eventName !== 'cadastroEcossistema') {
+            (window as any).fbq('trackCustom', eventName, {
+              content_name: 'Cadastro Telein',
+              status: 'completed'
+            });
+            console.log('✅ Evento adicional disparado:', eventName);
+          }
+        }
+        
         setIsSuccess(true);
         toast({
           title: "Cadastro realizado!",
@@ -197,69 +222,6 @@ const Index = () => {
     }
   };
 
-  // Dispara o pixel quando o cadastro for concluído
-  useEffect(() => {
-    if (!isSuccess) return;
-
-    console.log('=== DEBUG PIXEL - INÍCIO ===');
-    console.log('isSuccess:', isSuccess);
-    console.log('window.fbq disponível:', typeof window !== 'undefined' && typeof (window as any).fbq !== 'undefined');
-    
-    const dispararEventos = () => {
-      if (typeof window === 'undefined' || typeof (window as any).fbq === 'undefined') {
-        console.error('❌ fbq não está disponível!');
-        return false;
-      }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const pixelId = urlParams.get('pixel_id');
-      const conversionName = urlParams.get('conversion_name');
-      
-      console.log('📊 Parâmetros capturados da URL:');
-      console.log('  - pixel_id:', pixelId || '(não informado)');
-      console.log('  - conversion_name:', conversionName || '(não informado)');
-      
-      // Se tiver pixel_id customizado, inicializa o pixel
-      if (pixelId && pixelId !== '1701412423354782') {
-        console.log('🔄 Inicializando pixel customizado:', pixelId);
-        (window as any).fbq('init', pixelId);
-      }
-      
-      // SEMPRE dispara o evento padrão cadastroEcossistema
-      console.log('✅ Disparando evento OBRIGATÓRIO: cadastroEcossistema');
-      (window as any).fbq('trackCustom', 'cadastroEcossistema', {
-        content_name: 'Cadastro Telein',
-        status: 'completed'
-      });
-      
-      // Se houver conversion_name adicional e diferente, dispara também
-      if (conversionName && conversionName !== 'cadastroEcossistema') {
-        console.log('✅ Disparando evento ADICIONAL:', conversionName);
-        (window as any).fbq('trackCustom', conversionName, {
-          content_name: 'Cadastro Telein',
-          status: 'completed'
-        });
-      }
-      
-      console.log('=== DEBUG PIXEL - FIM ===');
-      return true;
-    };
-
-    // Aguarda um pouco para garantir que o fbq está pronto
-    const timer = setTimeout(() => {
-      const sucesso = dispararEventos();
-      
-      // Se falhar, tenta novamente
-      if (!sucesso) {
-        console.log('⚠️ Tentando novamente em 1 segundo...');
-        setTimeout(() => {
-          dispararEventos();
-        }, 1000);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [isSuccess]);
 
   if (isSuccess) {
     return (
