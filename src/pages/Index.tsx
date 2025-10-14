@@ -199,49 +199,69 @@ const Index = () => {
 
   // Dispara o pixel quando o cadastro for concluído
   useEffect(() => {
+    if (!isSuccess) return;
+
     console.log('=== DEBUG PIXEL ===');
     console.log('isSuccess:', isSuccess);
-    console.log('fbq disponível:', typeof window !== 'undefined' && typeof (window as any).fbq !== 'undefined');
     
-    if (isSuccess) {
-      // Aguarda um pouco para garantir que o fbq está carregado
+    const dispararEventos = () => {
+      if (typeof window === 'undefined' || typeof (window as any).fbq === 'undefined') {
+        console.error('fbq não está disponível!');
+        return false;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const pixelId = urlParams.get('pixel_id');
+      const conversionName = urlParams.get('conversion_name');
+      
+      console.log('Parâmetros da URL:');
+      console.log('- pixel_id:', pixelId);
+      console.log('- conversion_name:', conversionName);
+      
+      // Se tiver pixel_id customizado, inicializa o pixel
+      if (pixelId && pixelId !== '1701412423354782') {
+        console.log('Inicializando pixel customizado:', pixelId);
+        (window as any).fbq('init', pixelId);
+        // Aguarda um pouco após inicializar
+        setTimeout(() => {
+          dispararEventosCustomizados(conversionName);
+        }, 300);
+      } else {
+        dispararEventosCustomizados(conversionName);
+      }
+      
+      return true;
+    };
+
+    const dispararEventosCustomizados = (conversionName: string | null) => {
+      // Sempre dispara o evento padrão cadastroEcossistema
+      console.log('Disparando evento: cadastroEcossistema');
+      (window as any).fbq('trackCustom', 'cadastroEcossistema', {
+        content_name: 'Cadastro Telein',
+        status: 'completed'
+      });
+      
+      // Se houver conversion_name adicional e diferente, dispara também
+      if (conversionName && conversionName !== 'cadastroEcossistema') {
+        console.log('Disparando evento adicional:', conversionName);
+        (window as any).fbq('trackCustom', conversionName, {
+          content_name: 'Cadastro Telein',
+          status: 'completed'
+        });
+      }
+      
+      console.log('=== FIM DEBUG PIXEL ===');
+    };
+
+    // Tenta disparar imediatamente
+    const sucesso = dispararEventos();
+    
+    // Se falhar, tenta novamente após 1 segundo
+    if (!sucesso) {
+      console.log('Tentando novamente em 1 segundo...');
       setTimeout(() => {
-        if (typeof window !== 'undefined' && (window as any).fbq) {
-          const urlParams = new URLSearchParams(window.location.search);
-          const pixelId = urlParams.get('pixel_id');
-          const conversionName = urlParams.get('conversion_name');
-          
-          console.log('Parâmetros da URL:');
-          console.log('- pixel_id:', pixelId);
-          console.log('- conversion_name:', conversionName);
-          
-          // Se tiver pixel_id customizado, inicializa o pixel
-          if (pixelId && pixelId !== '1701412423354782') {
-            console.log('Inicializando pixel customizado:', pixelId);
-            (window as any).fbq('init', pixelId);
-          }
-          
-          // Sempre dispara o evento padrão cadastroEcossistema
-          console.log('Disparando evento: cadastroEcossistema');
-          (window as any).fbq('trackCustom', 'cadastroEcossistema', {
-            content_name: 'Cadastro Telein',
-            status: 'completed'
-          });
-          
-          // Se houver conversion_name adicional, dispara também esse evento
-          if (conversionName && conversionName !== 'cadastroEcossistema') {
-            console.log('Disparando evento adicional:', conversionName);
-            (window as any).fbq('trackCustom', conversionName, {
-              content_name: 'Cadastro Telein',
-              status: 'completed'
-            });
-          }
-          
-          console.log('=== FIM DEBUG PIXEL ===');
-        } else {
-          console.error('fbq não está disponível!');
-        }
-      }, 500);
+        dispararEventos();
+      }, 1000);
     }
   }, [isSuccess]);
 
