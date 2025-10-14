@@ -106,6 +106,7 @@ const Index = () => {
       const posicionamento = urlParams.get('posicionamento') || '';
       const pixelId = urlParams.get('pixel_id') || '';
       const conversionName = urlParams.get('conversion_name') || '';
+      const produto = urlParams.get('produto') || '';
       
       // Monta a query string com os parâmetros GET
       const getParams = new URLSearchParams();
@@ -116,6 +117,7 @@ const Index = () => {
       if (posicionamento) getParams.append('posicionamento', posicionamento);
       if (pixelId) getParams.append('pixel_id', pixelId);
       if (conversionName) getParams.append('conversion_name', conversionName);
+      if (produto) getParams.append('produto', produto);
       
       const queryString = getParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
