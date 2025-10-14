@@ -51,6 +51,7 @@ const Index = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [emailDuplicado, setEmailDuplicado] = useState(false);
 
   const {
     register,
@@ -210,6 +211,11 @@ const Index = () => {
           description: "Verifique seu e-mail para ativar a conta.",
         });
       } else {
+        // Verifica se é erro de email duplicado
+        if (result.message && result.message.includes("E-mail já está sendo utilizado")) {
+          setEmailDuplicado(true);
+        }
+        
         toast({
           variant: "destructive",
           title: "Erro no cadastro",
@@ -228,6 +234,46 @@ const Index = () => {
   };
 
 
+  // Tela de erro para email duplicado
+  if (emailDuplicado) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-2xl shadow-[var(--shadow-elegant)] p-8 text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8 text-destructive" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold text-foreground">E-mail já cadastrado</h2>
+              <p className="text-muted-foreground">
+                Este e-mail já está sendo utilizado. Se você já tem cadastro, recupere sua senha.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => window.location.href = "https://interface.telein.com.br/passlost/esquecisenha.php"}
+                className="w-full"
+                size="lg"
+              >
+                Recuperar senha
+              </Button>
+              <Button 
+                onClick={() => setEmailDuplicado(false)}
+                variant="outline"
+                className="w-full"
+                size="lg"
+              >
+                Voltar ao cadastro
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
@@ -244,13 +290,24 @@ const Index = () => {
                 Verifique seu e-mail para ativar a conta.
               </p>
             </div>
-            <Button 
-              onClick={() => window.location.href = "https://interface.telein.com.br/cadastro/urareversa_pixel.php"}
-              className="w-full"
-              size="lg"
-            >
-              Ir para o login
-            </Button>
+            <div className="space-y-3">
+              <Button 
+                onClick={() => window.location.href = "https://interface.telein.com.br/cadastro/urareversa_pixel.php"}
+                className="w-full"
+                size="lg"
+              >
+                Ir para o login
+              </Button>
+              <Button 
+                onClick={() => window.open("https://wa.me/558134542323", "_blank")}
+                variant="outline"
+                className="w-full"
+                size="lg"
+              >
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Falar no WhatsApp
+              </Button>
+            </div>
           </div>
         </div>
       </div>
