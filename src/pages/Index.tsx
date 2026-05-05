@@ -140,46 +140,30 @@ const Index = () => {
 
       console.log("=== DEBUG CADASTRO ===");
       console.log("URL:", backendUrl);
-      console.log("Payload sendo enviado (JSON):", payload);
-      console.log("Dados do formulário:", data);
-      
-      // Tenta primeiro com JSON
-      let response = await fetch(backendUrl, {
+      console.log("Payload sendo enviado:", payload);
+
+      // Envio único via FormData (formato esperado pelo backend PHP)
+      const formData = new FormData();
+      formData.append("nomecompleto", data.name);
+      formData.append("empresa", data.company);
+      formData.append("cpf", data.cpfCnpj.replace(/\D/g, ""));
+      formData.append("email", data.email);
+      formData.append("telefone", data.phone.replace(/\D/g, ""));
+      formData.append("segmento", data.segmento);
+      formData.append("senhanova", data.password);
+      formData.append("senhanova1", data.confirmPassword);
+
+      const response = await fetch(backendUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       console.log("Status da resposta:", response.status);
-      
-      // Se falhar com JSON, tenta com FormData (formato tradicional de POST)
-      if (!response.ok || response.status !== 201) {
-        console.log("Tentando com FormData...");
-        const formData = new FormData();
-        formData.append("nomecompleto", data.name);
-        formData.append("empresa", data.company);
-        formData.append("cpf", data.cpfCnpj.replace(/\D/g, ""));
-        formData.append("email", data.email);
-        formData.append("telefone", data.phone.replace(/\D/g, ""));
-        formData.append("segmento", data.segmento);
-        formData.append("senhanova", data.password);
-        formData.append("senhanova1", data.confirmPassword);
-        
-        response = await fetch(backendUrl, {
-          method: "POST",
-          body: formData,
-        });
-        
-        console.log("Status da resposta (FormData):", response.status);
-      }
-      
       const result = await response.json();
       console.log("Resposta completa do servidor:", result);
       console.log("=== FIM DEBUG ===");
 
-      if (result.ok && response.status === 201) {
+      if (result.ok) {
         // Dispara eventos do Meta Pixel ANTES de mudar o estado
         if (typeof window !== 'undefined' && (window as any).fbq) {
           const urlParams = new URLSearchParams(window.location.search);
