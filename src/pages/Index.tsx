@@ -188,6 +188,14 @@ const Index = () => {
             console.log('✅ Evento adicional disparado:', eventName);
           }
         }
+
+        // Google Analytics 4 - evento de cadastro (importado como conversão no Google Ads)
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          (window as any).gtag('event', 'cadastro_ecossistema', {
+            content_name: 'Cadastro Telein',
+          });
+          console.log('✅ GA4 event disparado: cadastro_ecossistema');
+        }
         
         setIsSuccess(true);
         toast({
