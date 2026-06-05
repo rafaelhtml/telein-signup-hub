@@ -111,6 +111,19 @@ const Index = () => {
   };
 
   const onSubmit = async (data: FormData) => {
+    // Se produto não veio da URL, exige escolha no select
+    const produtoUrl = produtoFromUrl.trim();
+    const produtoEscolhido = (data.produtoInteresse || "").trim();
+    
+    if (!produtoUrl && !produtoEscolhido) {
+      toast({
+        variant: "destructive",
+        title: "Selecione um produto",
+        description: "Escolha o principal produto de interesse.",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
@@ -124,7 +137,11 @@ const Index = () => {
       const posicionamento = urlParams.get('posicionamento') || '';
       const pixelId = urlParams.get('pixel_id') || '';
       const conversionName = urlParams.get('conversion_name') || '';
-      const produto = urlParams.get('produto') || '';
+      const fbclid = urlParams.get('fbclid') || '';
+      const gclid = urlParams.get('gclid') || '';
+      
+      // Produto: usa o da URL se existir; senão usa o escolhido no select (já em minúsculo/junto)
+      const produtoFinal = produtoUrl || produtoEscolhido;
       
       // Monta a query string com os parâmetros GET
       const getParams = new URLSearchParams();
@@ -135,7 +152,9 @@ const Index = () => {
       if (posicionamento) getParams.append('posicionamento', posicionamento);
       if (pixelId) getParams.append('pixel_id', pixelId);
       if (conversionName) getParams.append('conversion_name', conversionName);
-      if (produto) getParams.append('produto', produto);
+      if (produtoFinal) getParams.append('produto', produtoFinal);
+      if (fbclid) getParams.append('fbclid', fbclid);
+      if (gclid) getParams.append('gclid', gclid);
       
       const queryString = getParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
