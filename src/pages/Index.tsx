@@ -36,6 +36,7 @@ const formSchema = z.object({
     .max(15, "Telefone inválido"),
   segmento: z.string()
     .min(1, "Selecione um segmento"),
+  produtoInteresse: z.string().optional(),
   password: z.string()
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
   confirmPassword: z.string()
@@ -43,6 +44,16 @@ const formSchema = z.object({
   message: "As senhas não coincidem",
   path: ["confirmPassword"],
 });
+
+const PRODUTOS_ECOSSISTEMA = [
+  { value: "agentsdeia", label: "Agents de IA" },
+  { value: "urareversa", label: "URA Reversa" },
+  { value: "chatomnichannel", label: "Chat Omnichannel (Chat Telein)" },
+  { value: "disparoemmassa", label: "Disparo em Massa" },
+  { value: "discador", label: "Discador" },
+  { value: "chipmassa", label: "Chipmassa" },
+  { value: "ipbxinteligente", label: "IPBX Inteligente" },
+];
 
 type FormData = z.infer<typeof formSchema>;
 
