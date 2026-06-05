@@ -36,6 +36,7 @@ const formSchema = z.object({
     .max(15, "Telefone inválido"),
   segmento: z.string()
     .min(1, "Selecione um segmento"),
+  produtoInteresse: z.string().optional(),
   password: z.string()
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
   confirmPassword: z.string()
@@ -43,6 +44,16 @@ const formSchema = z.object({
   message: "As senhas não coincidem",
   path: ["confirmPassword"],
 });
+
+const PRODUTOS_ECOSSISTEMA = [
+  { value: "agentsdeia", label: "Agents de IA" },
+  { value: "urareversa", label: "URA Reversa" },
+  { value: "chatomnichannel", label: "Chat Omnichannel (Chat Telein)" },
+  { value: "disparoemmassa", label: "Disparo em Massa" },
+  { value: "discador", label: "Discador" },
+  { value: "chipmassa", label: "Chipmassa" },
+  { value: "ipbxinteligente", label: "IPBX Inteligente" },
+];
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -52,6 +63,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [emailDuplicado, setEmailDuplicado] = useState(false);
+  const [produtoFromUrl, setProdutoFromUrl] = useState<string>("");
 
   const {
     register,
@@ -72,12 +84,14 @@ const Index = () => {
     const cpf = urlParams.get('cpf') || urlParams.get('cpfcnpj');
     const email = urlParams.get('email');
     const telefone = urlParams.get('telefone') || urlParams.get('phone');
+    const produto = urlParams.get('produto') || '';
     
     if (nome) setValue('name', nome);
     if (empresa) setValue('company', empresa);
     if (cpf) setValue('cpfCnpj', formatCpfCnpj(cpf));
     if (email) setValue('email', email);
     if (telefone) setValue('phone', formatPhone(telefone));
+    setProdutoFromUrl(produto);
   }, [setValue]);
 
   const formatCpfCnpj = (value: string) => {
@@ -97,6 +111,19 @@ const Index = () => {
   };
 
   const onSubmit = async (data: FormData) => {
+    // Se produto não veio da URL, exige escolha no select
+    const produtoUrl = produtoFromUrl.trim();
+    const produtoEscolhido = (data.produtoInteresse || "").trim();
+    
+    if (!produtoUrl && !produtoEscolhido) {
+      toast({
+        variant: "destructive",
+        title: "Selecione um produto",
+        description: "Escolha o principal produto de interesse.",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     
     try {
@@ -110,7 +137,11 @@ const Index = () => {
       const posicionamento = urlParams.get('posicionamento') || '';
       const pixelId = urlParams.get('pixel_id') || '';
       const conversionName = urlParams.get('conversion_name') || '';
-      const produto = urlParams.get('produto') || '';
+      const fbclid = urlParams.get('fbclid') || '';
+      const gclid = urlParams.get('gclid') || '';
+      
+      // Produto: usa o da URL se existir; senão usa o escolhido no select (já em minúsculo/junto)
+      const produtoFinal = produtoUrl || produtoEscolhido;
       
       // Monta a query string com os parâmetros GET
       const getParams = new URLSearchParams();
@@ -121,7 +152,9 @@ const Index = () => {
       if (posicionamento) getParams.append('posicionamento', posicionamento);
       if (pixelId) getParams.append('pixel_id', pixelId);
       if (conversionName) getParams.append('conversion_name', conversionName);
-      if (produto) getParams.append('produto', produto);
+      if (produtoFinal) getParams.append('produto', produtoFinal);
+      if (fbclid) getParams.append('fbclid', fbclid);
+      if (gclid) getParams.append('gclid', gclid);
       
       const queryString = getParams.toString();
       const backendUrl = `https://interface.telein.com.br/cadastro/backend.php${queryString ? '?' + queryString : ''}`;
@@ -550,6 +583,25 @@ const Index = () => {
                       </p>
                     )}
                   </div>
+
+                  {!produtoFromUrl && (
+                    <div className="space-y-2">
+                      <Label htmlFor="produtoInteresse">Principal produto de interesse *</Label>
+                      <Select
+                        value={watch("produtoInteresse")}
+                        onValueChange={(value) => setValue("produtoInteresse", value)}
+                      >
+                        <SelectTrigger id="produtoInteresse">
+                          <SelectValue placeholder="Selecione um produto" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PRODUTOS_ECOSSISTEMA.map((p) => (
+                            <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha *</Label>
