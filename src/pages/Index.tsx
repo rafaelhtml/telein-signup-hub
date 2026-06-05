@@ -84,12 +84,14 @@ const Index = () => {
     const cpf = urlParams.get('cpf') || urlParams.get('cpfcnpj');
     const email = urlParams.get('email');
     const telefone = urlParams.get('telefone') || urlParams.get('phone');
+    const produto = urlParams.get('produto') || '';
     
     if (nome) setValue('name', nome);
     if (empresa) setValue('company', empresa);
     if (cpf) setValue('cpfCnpj', formatCpfCnpj(cpf));
     if (email) setValue('email', email);
     if (telefone) setValue('phone', formatPhone(telefone));
+    setProdutoFromUrl(produto);
   }, [setValue]);
 
   const formatCpfCnpj = (value: string) => {
