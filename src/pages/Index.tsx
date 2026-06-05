@@ -48,7 +48,7 @@ const formSchema = z.object({
 const PRODUTOS_ECOSSISTEMA = [
   { value: "agentsdeia", label: "Agents de IA" },
   { value: "urareversa", label: "URA Reversa" },
-  { value: "chatomnichannel", label: "Chat Omnichannel (Chat Telein)" },
+  { value: "chattelein", label: "Chat Omnichannel (Chat Telein)" },
   { value: "disparoemmassa", label: "Disparo em Massa" },
   { value: "discador", label: "Discador" },
   { value: "chipmassa", label: "Chipmassa" },
