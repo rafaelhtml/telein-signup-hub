@@ -584,6 +584,25 @@ const Index = () => {
                     )}
                   </div>
 
+                  {!produtoFromUrl && (
+                    <div className="space-y-2">
+                      <Label htmlFor="produtoInteresse">Principal produto de interesse *</Label>
+                      <Select
+                        value={watch("produtoInteresse")}
+                        onValueChange={(value) => setValue("produtoInteresse", value)}
+                      >
+                        <SelectTrigger id="produtoInteresse">
+                          <SelectValue placeholder="Selecione um produto" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PRODUTOS_ECOSSISTEMA.map((p) => (
+                            <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha *</Label>
                     <div className="relative">
