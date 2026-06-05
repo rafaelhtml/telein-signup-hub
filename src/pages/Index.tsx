@@ -63,6 +63,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [emailDuplicado, setEmailDuplicado] = useState(false);
+  const [produtoFromUrl, setProdutoFromUrl] = useState<string>("");
 
   const {
     register,
