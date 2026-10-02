@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -64,6 +65,7 @@ const Index = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [emailDuplicado, setEmailDuplicado] = useState(false);
   const [produtoFromUrl, setProdutoFromUrl] = useState<string>("");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const {
     register,
@@ -120,6 +122,16 @@ const Index = () => {
         variant: "destructive",
         title: "Selecione um produto",
         description: "Escolha o principal produto de interesse.",
+      });
+      return;
+    }
+
+    const recaptchaToken = recaptchaRef.current?.getValue();
+    if (!recaptchaToken) {
+      toast({
+        variant: "destructive",
+        title: "Verificação necessária",
+        description: "Por favor, confirme que você não é um robô.",
       });
       return;
     }
@@ -185,6 +197,7 @@ const Index = () => {
       formData.append("segmento", data.segmento);
       formData.append("senhanova", data.password);
       formData.append("senhanova1", data.confirmPassword);
+      formData.append("recaptchaToken", recaptchaToken);
 
       const response = await fetch(backendUrl, {
         method: "POST",
@@ -254,6 +267,7 @@ const Index = () => {
         description: "Não foi possível se conectar ao servidor.",
       });
     } finally {
+      recaptchaRef.current?.reset();
       setIsLoading(false);
     }
   };
@@ -653,6 +667,14 @@ const Index = () => {
                         {errors.confirmPassword.message}
                       </p>
                     )}
+                  </div>
+
+                  <div className="flex justify-center pt-2">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey="6Ld-2X0pAAAAALFJnnG5lTj_D7SeDpQPjAM1MGu0"
+                      theme="dark"
+                    />
                   </div>
 
                   <Button
